@@ -18,9 +18,9 @@ class Customer:
     def get_purchase_history(self) -> list["Receipt"]:
         return list(self.purchase_history)
 
-    # A customer counts as a real user once they have at least one purchase.
+    # A customer counts as a real user once they have at least one non-empty purchase.
     def is_verified(self) -> bool:
-        return len(self.purchase_history) > 0
+        return any(receipt.items for receipt in self.purchase_history)
 
 
 class Receipt:
@@ -87,6 +87,8 @@ if __name__ == "__main__":
 
     customer = Customer("Ana")
     print("Verified before purchase:", customer.is_verified())
+    customer.add_purchase(Receipt())
+    print("Verified after empty receipt:", customer.is_verified())
 
     receipt = Receipt()
     print("Empty receipt total:", receipt.compute_total())
